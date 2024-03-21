@@ -130,10 +130,13 @@ class ImageStandardizer(object):
         """Calculate per-channel mean and standard deviation from dataset X.
         Hint: you may find the axis parameter helpful"""
         # TODO: Complete this function
+        self.image_mean = np.mean(X,axis = (0,1,2))
+        self.image_std = np.std(X,axis = (0,1,2))
 
     def transform(self, X):
         """Return standardized dataset given dataset X."""
         # TODO: Complete this function
+        return (X-self.image_mean)/self.image_std
 
 
 class LandmarksDataset(Dataset):

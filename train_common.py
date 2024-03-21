@@ -138,6 +138,12 @@ def early_stopping(stats, curr_count_to_patience, global_min_loss):
     Returns: new values of curr_count_to_patience and global_min_loss
     """
     # TODO implement early stopping
+    curr_loss = stats[-1][1] 
+    if curr_loss < global_min_loss:
+        global_min_loss = curr_loss
+        curr_count_to_patience = 0
+    else:
+        curr_count_to_patience += 1
     return curr_count_to_patience, global_min_loss
 
 
@@ -211,6 +217,11 @@ def train_epoch(data_loader, model, criterion, optimizer):
     """
     for i, (X, y) in enumerate(data_loader):
         # TODO implement training steps
+        optimizer.zero_grad()
+        outputs = model(X) 
+        loss = criterion(outputs, y)
+        loss.backward()  
+        optimizer.step() 
 
 
 def predictions(logits):
@@ -222,5 +233,5 @@ def predictions(logits):
         the predicted class output as a PyTorch Tensor
     """
     # TODO implement predictions
-    pred = None
+    pred = torch.argmax(logits,dim=1)
     return pred
