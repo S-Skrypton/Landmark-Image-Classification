@@ -32,7 +32,7 @@ class challenge_source(nn.Module):
         self.n3 = nn.BatchNorm2d(8)
         self.fc1 = nn.Linear(8*2*2,8)
         self.d1 = nn.Dropout(p=0.1)
-        self.d2 = nn.Dropout(p=0.15)
+        self.d2 = nn.Dropout(p=0.15)# higher for layers with more neurons
 
         self.init_weights()
 

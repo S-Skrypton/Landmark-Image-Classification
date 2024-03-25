@@ -37,7 +37,7 @@ def freeze_layers(model, num_layers=0):
 def train(tr_loader, va_loader, te_loader, model, model_name, num_layers=0):
     """Train transfer learning model."""
     # TODO: Define loss function and optimizer. Replace "None" with the appropriate definitions.
-    criterion = torch.nn.CrossEntropyLoss()  # or another appropriate loss function
+    criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
     print("Loading target model with", num_layers, "layers frozen")
