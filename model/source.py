@@ -23,11 +23,11 @@ class Source(nn.Module):
         super().__init__()
 
         # TODO: define each layer
-        self.conv1 = None
-        self.conv2 = None
-        self.conv3 = None
-        self.pool = None
-        self.fc1 = None
+        self.conv1 = nn.Conv2d(3, 16, kernel_size=(5,5), stride=(2,2), padding=2)
+        self.pool = nn.MaxPool2d(kernel_size=(2,2), stride=(2,2))
+        self.conv2 = nn.Conv2d(16, 64, kernel_size=(5,5), stride=(2,2), padding=2)
+        self.conv3 = nn.Conv2d(64, 8, kernel_size=(5,5), stride=(2,2), padding=2)
+        self.fc1 = nn.Linear(8*2*2,8)
 
         self.init_weights()
 
@@ -40,7 +40,10 @@ class Source(nn.Module):
             nn.init.normal_(conv.weight, 0.0, 1 / sqrt(5 * 5 * C_in))
             nn.init.constant_(conv.bias, 0.0)
 
-        ## TODO: initialize the parameters for [self.fc1]
+        ## TODO: initialize the parameters for [self.fc_1]
+        C_in_fc = self.fc1.weight.size(1)
+        nn.init.normal_(self.fc1.weight, 0.0, 1 / sqrt(C_in_fc))
+        nn.init.constant_(self.fc1.bias, 0.0)
 
     def forward(self, x):
         """
@@ -51,6 +54,16 @@ class Source(nn.Module):
         You may optionally use the x.shape variables below to resize/view the size of
         the input matrix at different points of the forward pass.
         """
-        N, C, H, W = x.shape
-
         ## TODO: forward pass
+        N, C, H, W = x.shape
+        z1 = self.conv1(x)
+        h1 = F.relu(z1)
+        p2 = self.pool(h1)
+        z3 = self.conv2(p2)
+        h3 = F.relu(z3)
+        p4 = self.pool(h3)
+        z5 = self.conv3(p4)
+        h5 = F.relu(z5)
+        z6 = h5.reshape(N, 32)
+        z6 = self.fc1(z6)
+        return z6

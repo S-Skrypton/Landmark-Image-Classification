@@ -31,8 +31,10 @@ def Rotate(deg=30):
         :returns: H x W x C numpy array
         """
         # TODO: implement _rotate(img)
-
+        degree = np.random.uniform(-deg, deg)
+        return rotate(img, degree, reshape=False)
     return _rotate
+
 
 
 def Grayscale():
@@ -50,7 +52,8 @@ def Grayscale():
 
         """
         # TODO: implement _grayscale(img)
-
+        grayscale_img = np.mean(img, axis=2, keepdims=True).astype(np.uint8)
+        return np.repeat(grayscale_img, 3, axis=2)
     return _grayscale
 
 
@@ -85,7 +88,7 @@ def main(args):
     augment_partitions = set(args.partitions)
 
     # TODO: change `augmentations` to specify which augmentations to apply
-    augmentations = [Grayscale(), Rotate()]
+    augmentations = [Grayscale()]
 
     writer.writeheader()
     os.makedirs(f"{args.datadir}/augmented/", exist_ok=True)
@@ -104,7 +107,7 @@ def main(args):
             f"{args.datadir}/images/{row['filename']}",
             augmentations,
             n=1,
-            original=True,  # TODO: change to False to exclude original image.
+            original=False,  # TODO: change to False to exclude original image.
         )
         for i, img in enumerate(imgs):
             fname = f"{row['filename'][:-4]}_aug_{i}.png"

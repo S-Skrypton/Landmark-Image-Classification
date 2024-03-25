@@ -22,10 +22,10 @@ class Target(nn.Module):
         super().__init__()
 
         ## TODO: define each layer
-        self.conv1 = nn.Conv2d(3, 16, kernel_size=5, stride=2, padding=2)
-        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.conv2 = nn.Conv2d(16, 64, kernel_size=5, stride=2, padding=2)
-        self.conv3 = nn.Conv2d(64, 8, kernel_size=5, stride=2, padding=2)
+        self.conv1 = nn.Conv2d(3, 16, kernel_size=(5,5), stride=(2,2), padding=2)
+        self.pool = nn.MaxPool2d(kernel_size=(2,2), stride=(2,2))
+        self.conv2 = nn.Conv2d(16, 64, kernel_size=(5,5), stride=(2,2), padding=2)
+        self.conv3 = nn.Conv2d(64, 8, kernel_size=(5,5), stride=(2,2), padding=2)
         self.fc_1 = nn.Linear(8*2*2,2)
 
         self.init_weights()
@@ -63,7 +63,7 @@ class Target(nn.Module):
         p4 = self.pool(h3)
         z5 = self.conv3(p4)
         h5 = F.relu(z5)
-        z6 = h5.view(h5.size(0),-1)
+        z6 = h5.reshape(N, 32)
         z6 = self.fc_1(z6)
         return z6
 
